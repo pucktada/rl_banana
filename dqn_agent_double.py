@@ -8,11 +8,11 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 
-BUFFER_SIZE = int(1e5)  # replay buffer size
+BUFFER_SIZE = int(1e4)  # replay buffer size
 BATCH_SIZE = 64         # minibatch size
 GAMMA = 0.99            # discount factor
-TAU = 1e-3              # for soft update of target parameters
-LR = 5e-4               # learning rate 
+TAU = 5e-3              # for soft update of target parameters
+LR  = 5e-4              # learning rate 
 UPDATE_EVERY = 4        # how often to update the network
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -36,7 +36,7 @@ class AgentDouble():
         # Q-Network
         self.qnetwork_local  = QNetwork(state_size, action_size, seed).to(device)
         self.qnetwork_target = QNetwork(state_size, action_size, seed).to(device)
-        self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
+        self.optimizer = optim.AdamW(self.qnetwork_local.parameters(), lr=LR)
 
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, seed)
@@ -74,7 +74,7 @@ class AgentDouble():
         else:
             return random.choice(np.arange(self.action_size))
 
-    def learn(self, experiences, gamma):
+    def learn(self, gamma):
         """Update value parameters using given batch of experience tuples.
 
         Params
@@ -121,13 +121,13 @@ class AgentDouble():
     def save_model(self, filepath):
         """ Save model ...
         """ 
-        torch.save(self.qnetwork_target.state_dict(), filepath)
+        torch.save(self.qnetwork_local.state_dict(), filepath)
         
     def load_model(self, filepath):
         """ Load model ...
         """ 
+        self.qnetwork_local.load_state_dict(torch.load(filepath))        
         self.qnetwork_target.load_state_dict(torch.load(filepath))
-        self.qnetwork_local.load_state_dict(torch.load(filepath))
         
 class ReplayBuffer:
     """Fixed-size buffer to store experience tuples."""

@@ -8,10 +8,10 @@ A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is
 
 The state space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around the agent's forward direction. Given this information, the agent has to learn how to best select actions. Four discrete actions are available, corresponding to:
 
-0 - move forward.
-1 - move backward.
-2 - turn left.
-3 - turn right.
+0 - move forward.<br/>
+1 - move backward.<br/>
+2 - turn left.<br/>
+3 - turn right.<br/>
 
 ## Criteria
 
@@ -29,5 +29,8 @@ then, unzip the "Banana.zip" with contain the Unity environment for this project
 
 ## How to Run
 
+Start Report.ipynb in jupyter notebook, which contain the code to train the RL agent and plot its performance over time. 
+The RL agent should be able to solve the environment within 500 episode.
 
-
+Report.html -- the status version of the output from Report.ipynb <br/>
+dagent.pt -- the saved weights of the learned network that can solve the environment <br/>
